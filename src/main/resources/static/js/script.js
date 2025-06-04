@@ -12,16 +12,18 @@ function validateName() {
         nameError.innerHTML = "Name is required";
         return false;
     }
-    if(!name.match(/^[A-Za-z]*\s{1}[A-Za-z]*$/)){
+    if(!name.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/)){
         nameError.innerHTML = "Write full name";
         return false;
     }
-    nameError.innerHTML = `<span style ="color:green" class="material-symbols-outlined">
+    nameError.innerHTML = `<span style ="color:green;" class="material-symbols-outlined">
 check_circle
 </span>`;
+
 submitError.innerHTML="";
     return true;
 }
+
 //method for validation of contact field
 function validatePhone() {
     let phone = document.getElementById("user-phone").value.trim();
@@ -37,6 +39,7 @@ function validatePhone() {
     phoneError.innerHTML = `<span style ="color:green" class="material-symbols-outlined">
 check_circle
 </span>`;
+
 submitError.innerHTML="";
 return true;
 }
@@ -58,6 +61,7 @@ check_circle
 submitError.innerHTML="";
 return true;
 }
+
 //method for validation of Password field
 function validatePassword() {
     let password  = document.getElementById("user-password").value.trim();
@@ -65,52 +69,37 @@ function validatePassword() {
         passwordError.innerHTML = "Password is required";
         return false;
     }
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&]).{8,}/.test(password)) {
+        passwordError.innerHTML = "Password must contain at least 8 characters, including one uppercase, one lowercase, one number, and one special character.";
+        return false;
+    }
 
-        if(!password.match(/[a-z]/)) {
-            passwordError.innerHTML = "Must contain one lowercase letter";
-            return false;
-        }
-        if(!password.match(/[A-Z]/)) {
-            passwordError.innerHTML = "Must contain one uppercase letter";
-            return false;
-        }
-        if(!password.match(/\d/)) {
-            passwordError.innerHTML = "Must contain one numeric value";
-            return false;
-        }
-        if(!password.match(/[@$#!%*?&]/)) {
-            passwordError.innerHTML = "Must contain one special character(@$!%*?&).";
-            return false;
-        }
-        if(password.length<8) {
-            passwordError.innerHTML = "Password must be 8 characters long";
-            return false;
-        }
-
-    passwordError.innerHTML =`<span style ="color:green" class="material-symbols-outlined">
-check_circle
-</span>`;
+   passwordError.innerHTML = `<span style ="color:green" class="material-symbols-outlined">
+   check_circle
+   </span>`;
 submitError.innerHTML="";
 return true;
 }
 
 
 
-// method to validate the form
+// Method to validate the form
 // Once the validation get successful it will send the data to backend to save in DB.
 function validateForm() {
+
     if(!validateName() || !validatePhone() || !validateEmail() || !validatePassword()) {
         submitError.innerHTML = "Please fix above errors";
         return false;
     }
     else {
         const data = {
-            studentName: document.getElementById('user-name').value.trim(),
-            studentContact: document.getElementById('user-phone').value.trim(),
-            studentEmail: document.getElementById('user-email').value.trim(),
+            name: document.getElementById('user-name').value.trim(),
+            contact: document.getElementById('user-phone').value.trim(),
+            email: document.getElementById('user-email').value.trim(),
             password: document.getElementById('user-password').value.trim(),
         };
-        $.ajax('http://localhost:8080/save-form', {
+
+        $.ajax('http://localhost:8080/form/save', {
             type: 'POST',
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -120,29 +109,43 @@ function validateForm() {
                 },
             processData: false,
             success: function(response) {
-                console.log("Success", response);
+				if(response.message == "Data saved successfully")
+                alert("Data saved successfully.");
+                else
+                alert("Duplicate Data found. Retry!!");
             },
             error: function(xhr, status, error) {
-                console.error("Error: ", error);
+                console.error(`Error ${xhr.status}: ${xhr.responseText}`);
+                alert("!!Error in saving data");
             }
         });
     }
 }
-// method to fetch the list from the backend
-function showList() {
-    console.log("Hello");
-    $.ajax('http://localhost:8080/showList', {
+
+// Method to fetch the list from the backend
+function showList(){
+    $.ajax('http://localhost:8080/form/showList', {
     type: 'GET',
     success: function(response) {
-    console.log(response);
-    $("#itemList").empty();
-    response.forEach(function(item) {
-    $("#itemList").append(`<li>${item}</li>`);
+    $("#table-body").empty();
+    if(response.length == 0) {
+    $("#table-body").append(`<tr><td colspan="4"> No student data available</tr>`);
+    } else {
+    response.forEach(function(student) {
+	$("#table-body").append(
+	`<tr>
+	<td>${student.id}</td>
+	<td>${student.name}</td>
+	<td>${student.contact}</td>
+	<td>${student.email}</td>
+	</tr>`);
     });
+    }
 },
     error:
     function(xhr, status, error) {
     console.error("Error fetching data: " , error);
+    $("#table-body").append(`<tr><td colspan="4">Error fetching data. Please try again.</td></tr>`);
  }
  });
 }

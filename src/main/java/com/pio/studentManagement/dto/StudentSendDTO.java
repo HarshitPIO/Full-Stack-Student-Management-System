@@ -1,23 +1,14 @@
-package com.pio.studentManagement.entity;
+package com.pio.studentManagement.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "unique_contact", columnNames = "contact"), @UniqueConstraint(name = "unique_email", columnNames = "email")})
-public class Student {
-    @Id()
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class StudentSendDTO {
 
     @NotEmpty(message = "is required")
     private String name;
@@ -35,12 +26,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", contact='" + contact + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return "StudentSendDTO{" + "name='" + name + '\'' + ", contact='" + contact + '\'' + ", email='" + email + '\'' + ", password='" + password + '\'' + '}';
     }
 }

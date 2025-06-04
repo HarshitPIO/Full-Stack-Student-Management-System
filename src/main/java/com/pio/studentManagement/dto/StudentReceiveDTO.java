@@ -1,22 +1,14 @@
-package com.pio.studentManagement.entity;
+package com.pio.studentManagement.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "unique_contact", columnNames = "contact"), @UniqueConstraint(name = "unique_email", columnNames = "email")})
-public class Student {
-    @Id()
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Data
+public class StudentReceiveDTO {
     private int id;
 
     @NotEmpty(message = "is required")
@@ -31,16 +23,16 @@ public class Student {
     private String email;
 
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$#!%*?&]).{8,}$", message = "Password must contain one lowercase, one uppercase, one number, one special character and of min. length 8")
-    private String password;
+    private String errorMessage;
+
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "StudentReceiveDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", contact='" + contact + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }
