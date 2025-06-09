@@ -1,3 +1,9 @@
+//const nameError = document.getElementById("name-error");
+//const phoneError = document.getElementById("phone-error");
+//const emailError = document.getElementById("email-error");
+//const passwordError = document.getElementById("password-error");
+//const messageError = document.getElementById("message-error");
+//const submitError = document.getElementById("submit-error");
 const errors = {
 name: $("#name-error"),
 phone: $("#phone-error"),
@@ -105,6 +111,11 @@ function validateForm() {
             type: 'POST',
             contentType: "application/json",
             data: JSON.stringify(data),
+//            headers: {
+//                    "Accept": "application/json",
+//                    "Content-Type": "application/json"
+//                },
+//            processData: false,
             success: function(response) {
 				if(response.message == "Data saved successfully")
                 alert("Data saved successfully.");
