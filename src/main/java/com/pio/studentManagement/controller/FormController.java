@@ -32,7 +32,7 @@ public class FormController {
     public ResponseEntity<Map<String, String>> saveForm(@Valid @RequestBody StudentSendDTO studentSendDTO) {
         try {
             logger.info("student data received");
-            if (studentServiceImpl.saveStudent(studentSendDTO) == "Data saved successfully")
+            if (studentServiceImpl.saveStudent(studentSendDTO).getMessage() == "Data saved successfully")
             return ResponseEntity.ok(Collections.singletonMap("message", "Data saved successfully"));
             else {
                 return ResponseEntity.ok(Collections.singletonMap("message", "Student with this name already exists"));
@@ -50,7 +50,7 @@ public class FormController {
     @GetMapping("/showList")
     public ResponseEntity<List<?>> showList() {
         try {
-            return ResponseEntity.ok(studentServiceImpl.getAllStudent());
+            return ResponseEntity.ok(studentServiceImpl.getAllStudent().getData());
         } catch (Exception e) {
             logger.error("Error in fetching list from DB. {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
