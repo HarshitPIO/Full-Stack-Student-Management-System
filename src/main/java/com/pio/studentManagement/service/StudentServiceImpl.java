@@ -3,6 +3,7 @@ package com.pio.studentManagement.service;
 import com.pio.studentManagement.dto.StudentReceiveDTO;
 import com.pio.studentManagement.dto.StudentSendDTO;
 import com.pio.studentManagement.entity.Student;
+import com.pio.studentManagement.enums.Status;
 import com.pio.studentManagement.repository.StudentRepository;
 import com.pio.studentManagement.utils.GetStudentResponse;
 import com.pio.studentManagement.utils.SaveStudentResponse;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +27,7 @@ public class StudentServiceImpl implements StudentService {
 
     /**
      * This method is used for saving the student data in the database.
+     *
      * @param studentSendDTO : This is my DTO used for receiving data from the frontend.
      */
     @Override
@@ -38,13 +39,13 @@ public class StudentServiceImpl implements StudentService {
             BeanUtils.copyProperties(student, studentSendDTO);
             studentRepository.save(student);
             logger.info("Data saved successfully");
-            response.setSuccess(true);
+            response.setStatus(Status.SUCCESS);
             response.setMessage("Data saved successfully");
             return response;
         } catch (Exception e) {
             logger.error("Error in saving data: {}", e.getMessage());
-            response.setSuccess(false);
-            response.setMessage("Error in saving data");
+            response.setStatus(Status.ALREADY_EXISTS);
+            response.setMessage("Data already exist");
             return response;
         }
     }
@@ -53,6 +54,7 @@ public class StudentServiceImpl implements StudentService {
     /**
      * This method is used to fetch the list of student data from the DB.
      * It is copying the field data of student object to studentReceiveDTO object.
+     *
      * @return : It is returning the list of students that are saved in the DB.
      */
     public GetStudentResponse getAllStudent() {
@@ -72,11 +74,10 @@ public class StudentServiceImpl implements StudentService {
             response.setSuccess(true);
             response.setMessage("Data fetched successfully");
             response.setData(dtos);
-        }
-         catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Error in getting list: ", e);
-           response.setSuccess(false);
-           response.setMessage("Failed to retrieve the data");
+            response.setSuccess(false);
+            response.setMessage("Failed to retrieve the data");
         }
         return response;
     }

@@ -1,5 +1,6 @@
 package com.pio.studentManagement.utils;
 
+import com.pio.studentManagement.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveStudentResponse {
-    private boolean success;
+    private Status status;
     private String message;
 }
