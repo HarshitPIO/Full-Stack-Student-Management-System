@@ -1,3 +1,9 @@
+//const nameError = document.getElementById("name-error");
+//const phoneError = document.getElementById("phone-error");
+//const emailError = document.getElementById("email-error");
+//const passwordError = document.getElementById("password-error");
+//const messageError = document.getElementById("message-error");
+//const submitError = document.getElementById("submit-error");
 const errors = {
 name: $("#name-error"),
 phone: $("#phone-error"),
@@ -16,7 +22,6 @@ console.log("I am here");
         return false;
     }
     if(!name.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/)){
-
         errors.name.html("Write full name");
         return false;
     }
@@ -24,7 +29,6 @@ console.log("I am here");
 check_circle
 </span>`);
 errors.submit.empty();
-
     return true;
 }
 
@@ -42,11 +46,9 @@ function validatePhone() {
 
     errors.phone.html(`<span style ="color:green" class="material-symbols-outlined">
 check_circle
-
 </span>`);
 
 errors.submit.empty();
-
 return true;
 }
 
@@ -79,17 +81,11 @@ function validatePassword() {
         errors.password.html("Password must contain at least 8 characters, including one uppercase, one lowercase, one number, and one special character.");
         return false;
     }
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&]).{8,}/.test(password)) {
-        passwordError.innerHTML = "Password must contain at least 8 characters, including one uppercase, one lowercase, one number, and one special character.";
-        return false;
-    }
-
 
    errors.password.html(`<span style ="color:green" class="material-symbols-outlined">
    check_circle
    </span>`);
 errors.submit.empty();
-
 return true;
 }
 
@@ -109,13 +105,17 @@ function validateForm() {
             contact: $("#user-phone").val().trim(),
             email: $("#user-email").val().trim(),
             password: $("#user-password").val().trim(),
-
         };
 
         $.ajax('http://localhost:8080/form/save', {
             type: 'POST',
             contentType: "application/json",
             data: JSON.stringify(data),
+//            headers: {
+//                    "Accept": "application/json",
+//                    "Content-Type": "application/json"
+//                },
+//            processData: false,
             success: function(response) {
 				if(response.message == "Data saved successfully")
                 alert("Data saved successfully.");
