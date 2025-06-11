@@ -16,6 +16,7 @@ console.log("I am here");
         return false;
     }
     if(!name.match(/^[A-Za-z]+(?:\s[A-Za-z]+)+$/)){
+
         errors.name.html("Write full name");
         return false;
     }
@@ -23,6 +24,7 @@ console.log("I am here");
 check_circle
 </span>`);
 errors.submit.empty();
+
     return true;
 }
 
@@ -40,9 +42,11 @@ function validatePhone() {
 
     errors.phone.html(`<span style ="color:green" class="material-symbols-outlined">
 check_circle
+
 </span>`);
 
 errors.submit.empty();
+
 return true;
 }
 
@@ -75,11 +79,17 @@ function validatePassword() {
         errors.password.html("Password must contain at least 8 characters, including one uppercase, one lowercase, one number, and one special character.");
         return false;
     }
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&]).{8,}/.test(password)) {
+        passwordError.innerHTML = "Password must contain at least 8 characters, including one uppercase, one lowercase, one number, and one special character.";
+        return false;
+    }
+
 
    errors.password.html(`<span style ="color:green" class="material-symbols-outlined">
    check_circle
    </span>`);
 errors.submit.empty();
+
 return true;
 }
 
@@ -99,6 +109,7 @@ function validateForm() {
             contact: $("#user-phone").val().trim(),
             email: $("#user-email").val().trim(),
             password: $("#user-password").val().trim(),
+
         };
 
         $.ajax('http://localhost:8080/form/save', {
